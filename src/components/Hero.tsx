@@ -16,6 +16,8 @@ const Hero: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState('Chief Revenue Officer');
   const [selectedLength, setSelectedLength] = useState('Short (1 Page)');
   const [selectedLanguage, setSelectedLanguage] = useState('English');
+  const [atsMode, setAtsMode] = useState<'auto' | 'manual'>('auto');
+  const [manualAtsKeywords, setManualAtsKeywords] = useState('');
   const [includeExperience, setIncludeExperience] = useState(true);
   const [includeEducation, setIncludeEducation] = useState(true);
   const [includeSkills, setIncludeSkills] = useState(true);
@@ -70,6 +72,12 @@ const Hero: React.FC = () => {
       
       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
       
+      // Inject invisible real text for ATS parsers directly into the PDF document layer
+      // This guarantees parsing algorithms can scrape these high-value keywords.
+      pdf.setFontSize(1);
+      pdf.setTextColor(255, 255, 255); // White text on white background
+      pdf.text(finalAtsKeywords, 10, pdfHeight - 2, { maxWidth: pdfWidth - 20 });
+      
       const safeName = name.replace(/\s+/g, '_');
       const safeRole = selectedRole.replace(/\s+/g, '_');
       pdf.save(`${safeName}_${safeRole}_Resume_${selectedLanguage}.pdf`);
@@ -86,6 +94,7 @@ const Hero: React.FC = () => {
   };
 
   const atsKeywords = getAtsKeywords(selectedRole, selectedCountry);
+  const finalAtsKeywords = atsMode === 'auto' ? atsKeywords : manualAtsKeywords;
   
   // Translations for PDF headers
   const t = {
@@ -312,10 +321,47 @@ const Hero: React.FC = () => {
                 </div>
               </div>
               
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-2">ATS Keywords Optimization</label>
+                <div className="flex flex-wrap gap-4 mb-3">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="atsMode"
+                      value="auto"
+                      checked={atsMode === 'auto'}
+                      onChange={() => setAtsMode('auto')}
+                      className="text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="text-sm text-slate-700">Auto-generate (Based on Role/Region)</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="atsMode"
+                      value="manual"
+                      checked={atsMode === 'manual'}
+                      onChange={() => setAtsMode('manual')}
+                      className="text-indigo-600 focus:ring-indigo-500"
+                    />
+                    <span className="text-sm text-slate-700">Custom Keywords</span>
+                  </label>
+                </div>
+                {atsMode === 'manual' && (
+                  <textarea
+                    value={manualAtsKeywords}
+                    onChange={(e) => setManualAtsKeywords(e.target.value)}
+                    placeholder="Enter targeted keywords to invisibly embed in PDF (e.g., Salesforce, Enterprise Sales, VP, MEDDIC)"
+                    rows={2}
+                    className="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm resize-none"
+                  />
+                )}
+              </div>
+
               <div className="bg-indigo-50 p-3 rounded-lg flex items-start gap-3">
                 <SparklesIcon className="text-indigo-600 shrink-0 mt-0.5" size={16} />
                 <p className="text-xs text-indigo-800 leading-relaxed">
-                  The generated PDF will automatically include hidden ATS-friendly keywords optimized for {selectedRole} roles in {selectedCountry}.
+                  The generated PDF will automatically include hidden ATS-friendly keywords {atsMode === 'auto' ? `optimized for ${selectedRole} roles in ${selectedCountry}` : 'based on your custom input'}.
                 </p>
               </div>
             </div>
@@ -479,10 +525,7 @@ const Hero: React.FC = () => {
           </div>
         )}
 
-        {/* ATS Invisible Keywords */}
-        <div className="text-[4px] text-white opacity-1 select-none mt-10">
-          {atsKeywords}
-        </div>
+        {/* The ATSKeywords element used to be rendered as HTML, but we now render directly to jsPDF canvas so it is fully selectable string text. */}
       </div>
     </section>
   );

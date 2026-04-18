@@ -177,39 +177,40 @@ export const RESUME_DATA: ResumeData = {
       logoUrl: "/tokenizer-logo.png",
       liveUrl: "https://tokenizer.estate",
       caseStudy: [
-        "Challenge: Tokenizer.estate needed to secure institutional backing and establish a global presence in the emerging Real World Asset (RWA) tokenization market.",
-        "Action: Architected a comprehensive Go-To-Market strategy targeting Tier-1 VCs and family offices. Developed a compelling investment narrative and financial model. Built strategic partnerships with legal frameworks to ensure cross-border compliance.",
-        "Result: Successfully secured $36.5M in institutional capital. Expanded operations into 8 new international regions within 12 months, establishing the company as a leader in the RWA space."
+        "Challenge: Secure tier-1 institutional funding for an unproven, pre-revenue RWA tokenization startup lacking a foundational Go-To-Market strategy, commercial department, and market credibility.",
+        "Action: Architected the global GTM strategy and built the commercial function from zero. Initiated strategic engagements with UAE and EU regulatory sandboxes to dissolve cross-border compliance friction and accelerate enterprise onboarding.",
+        "Result: Generated a fully qualified $25M sales pipeline, secured early tier-1 institutional backing, and closed 5 major B2B infrastructure deals within the first 5 months of operation.",
+        "Key Takeaway: Balancing technological innovation with robust, multi-jurisdictional regulatory compliance is the ultimate differentiator in the RWA space. It separates novelty from true institutional-grade assets."
       ]
     },
     {
       id: "proj-2",
-      title: "Orbita Investments Capital Raise",
+      title: "Orbita Investments Capital Raise & Commercial Engine",
       company: "Orbita Investments",
-      description: "Led capital raising initiatives, securing significant investments through negotiations with financial institutions. Currently raising Capital for startup investment amount of $36.5 Million.",
-      tags: ["Fundraising", "M&A", "Investment Acquisition"],
+      description: "Established the commercial framework and go-to-market playbook while spearheading institutional negotiations to raise $36.5M in startup capital.",
+      tags: ["Fundraising", "M&A", "Investment Acquisition", "Revenue Operations"],
       imageUrl: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800",
       logoUrl: "/orbita-logo.png",
       liveUrl: "https://orbita.investments",
       caseStudy: [
-        "Challenge: Orbita Investments required a scalable commercial engine to accelerate growth and expand its footprint in the EMEA market.",
-        "Action: Restructured the business development division, implementing data-driven CRM processes and targeted B2B campaigns. Led negotiations for complex, multi-million dollar M&A deals.",
-        "Result: Achieved a 10x increase in annual recurring revenue (ARR) within 18 months. Improved lead conversion rates by 45% and reduced the average sales cycle length by 30%."
+        "Challenge: Rapidly establish a scalable commercial operation capable of driving enterprise engagement to mount and support a $36.5M institutional capital raise.",
+        "Action: Constructed the commercial department from the ground up in 2 months. Deployed targeted operational frameworks, KPI dashboards, automated lead qualification, structured deal-desks, and enterprise playbooks.",
+        "Result: Reduced average sales cycle by 40% and onboarded 50+ strategic partners. Achieved 125% of Q1 revenue targets against a $5M baseline quota, successfully driving the $36.5M funding negotiations."
       ]
     },
     {
       id: "proj-3",
       title: "Global Real Estate Expansion",
       company: "The World Real Estate",
-      description: "Led expansion from 1 to 8 regions (UAE, Asia, Europe, USA) in a quarter, fortifying global presence and handling Key (HNI) clients.",
+      description: "Overhauled sales operations, shifting strategy to direct developers, leading to an expansion across 8 global regions in a single quarter.",
       tags: ["Global Expansion", "HNI Clients", "Sales Strategy"],
       imageUrl: "https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80&w=800",
       logoUrl: "https://ui-avatars.com/api/?name=The+World&background=0F172A&color=fff&rounded=true&bold=true",
       liveUrl: "https://emirates.estate",
       caseStudy: [
-        "Challenge: The company needed to rapidly scale its operations globally while maintaining high service standards for High-Net-Worth Individuals (HNWIs).",
-        "Action: Shifted strategy from agencies to direct developers. Overhauled sales operations and built a high-performing sales team on a lean budget.",
-        "Result: Expanded from 1 to 8 global regions in a single quarter. Increased MRR from 0.6% to 10% and achieved 49% net profit."
+        "Challenge: Pivot the organization's heavy reliance on external agencies to a high-margin, direct-to-developer sales model while simultaneously expanding international operations.",
+        "Action: Overhauled the global sales operation and deployed targeted account strategies for High-Net-Worth Individuals (HNWIs). Built and trained a rigorous internal sales unit operating on a strictly lean budget.",
+        "Result: Executed expansion across 8 global regions (UAE, Asia, Europe, USA) in a single quarter. Drove 10x revenue growth within 2 months, increasing MRR from 0.6% to 10%, achieving 49% net profit, and personally closing a $1.5M cornerstone deal."
       ]
     },
     {
@@ -221,9 +222,9 @@ export const RESUME_DATA: ResumeData = {
       imageUrl: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&q=80&w=800",
       logoUrl: "https://ui-avatars.com/api/?name=GROWmatica&background=059669&color=fff&rounded=true&bold=true",
       caseStudy: [
-        "Challenge: GROWmatica needed to penetrate new industry verticals and expand its indirect sales channels across the highly competitive European IT market.",
-        "Action: Conducted comprehensive market analysis to identify high-potential verticals. Developed and executed a targeted channel partner recruitment program.",
-        "Result: Established a robust network of strategic partners, resulting in a 60% increase in indirect sales revenue and significant market share expansion in the Nordics & DACH regions."
+        "Challenge: Penetrate new industry verticals and rapidly expand indirect partnership sales channels across the highly competitive European IT market.",
+        "Action: Conducted intensive geographical market analysis to identify high-potential verticals. Architected and executed a structured channel partner recruitment sequence targeting major regional players.",
+        "Result: Established a robust network of strategic partners, driving a 60% increase in indirect sales revenue and capturing significant market share in the Nordics & DACH regions."
       ]
     },
     {
@@ -235,9 +236,9 @@ export const RESUME_DATA: ResumeData = {
       imageUrl: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&q=80&w=800",
       logoUrl: "https://ui-avatars.com/api/?name=Cbonds&background=DC2626&color=fff&rounded=true&bold=true",
       caseStudy: [
-        "Challenge: Drive subscription sales for complex financial data and analytics platforms to a highly sophisticated institutional audience.",
-        "Action: Implemented AI and low-code tools, reducing integration time by 40%. Streamlined operations using Notion/Trello, creating a comprehensive Sales Enablement and Partner Program.",
-        "Result: Drove 20% overall growth and 15% recurring revenue increase. Consistently ranked in the top 10% of sales representatives globally."
+        "Challenge: Drive enterprise subscription sales of complex financial data and analytics platforms into a highly sophisticated global institutional audience.",
+        "Action: Deployed AI and low-code integrations to aggressively streamline internal deal flow and prospecting. Structured a comprehensive Sales Enablement and Partner Program tracked entirely via Notion/Trello frameworks.",
+        "Result: Accelerated tech integration time by 40%. Drove 20% overall growth and a 15% recurring revenue increase, maintaining a position in the top 10% of global sales representatives."
       ]
     }
   ],
@@ -287,7 +288,7 @@ export const RESUME_DATA: ResumeData = {
       title: "AI Sales Automation",
       description: "Implementing cutting-edge AI tools and predictive analytics to automate outreach, qualify leads, and reduce sales cycles.",
       iconName: "bot",
-      deliverables: ["CRM AI Integration", "Automated Outreach Sequences", "Predictive Lead Scoring", "Sales Enablement AI Bots"]
+      deliverables: ["CRM AI Integration", "AI-powered Prospecting & Outreach Personalization", "Automated Follow-up & Nurturing Sequences", "Predictive Lead Scoring"]
     }
   ]
 };

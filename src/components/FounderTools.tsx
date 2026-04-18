@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Calculator, ArrowRight, TrendingUp, Users, DollarSign, Activity, PieChart, Sparkles } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import React, { useState, useMemo } from 'react';
+import { Calculator, ArrowRight, TrendingUp, Users, DollarSign, Activity, PieChart, Sparkles, Filter, Building2 } from 'lucide-react';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Bar, Cell, LabelList } from 'recharts';
 
 const FounderTools: React.FC = () => {
   // Revenue Projection
@@ -27,6 +27,11 @@ const FounderTools: React.FC = () => {
   const [inboundVolume, setInboundVolume] = useState(500);
   const [manualQualTime, setManualQualTime] = useState(7); // Days
   const [sdrTeamSize, setSdrTeamSize] = useState(3);
+
+  // Mini Product: RWA Compliance-as-a-Service
+  const [assetValue, setAssetValue] = useState(50000000);
+  const [traditionalLegalFees, setTraditionalLegalFees] = useState(250000);
+  const [traditionalTimeDays, setTraditionalTimeDays] = useState(180);
 
   const projectedRevenue = Math.round(leads * (conversionRate / 100) * dealSize);
   const ltvCacRatio = (ltv / cac).toFixed(1);
@@ -56,9 +61,44 @@ const FounderTools: React.FC = () => {
   };
 
   // AI Calculations
-  const aiQualTimeHours = Math.max(0.5, Math.round((manualQualTime * 24) * 0.05)); // 95% reduction in qual time, showing in hours
-  const hoursSavedWeekly = Math.round((sdrTeamSize * 40) * 0.6); // 60% of time saved for proactive selling
-  const pipelineIncrease = Math.round(inboundVolume * 2.5); // AI handles 2.5x volume effectively without dropped leads
+  const aiQualTimeHours = Math.max(0.5, Math.round((manualQualTime * 24) * 0.05)); // 95% reduction in qual time
+  const hoursSavedWeekly = Math.round((sdrTeamSize * 40) * 0.75); // 75% of time saved for proactive selling
+  const pipelineIncrease = Math.round(inboundVolume + (sdrTeamSize * 150 * 2.5)); // Significant increase driven by team size * AI volume multiplier
+  
+  // Nuanced Qualified Leads Calculation
+  const baseScoringAccuracy = 0.40; // Manual precision (40% of standard qualified leads are actually good)
+  const aiScoringAccuracy = 0.85; // AI precision (filters noise, better fit threshold)
+  const baseOutreachConversion = 0.15; // Manual reply rate
+  const aiOutreachConversion = 0.32; // Hyper-personalized reply rate
+
+  const aiEffectivenessMultiplier = (aiScoringAccuracy / baseScoringAccuracy) * (aiOutreachConversion / baseOutreachConversion);
+  
+  const qualifiedLeadsPerSdr = Math.round((inboundVolume * baseScoringAccuracy) / sdrTeamSize);
+  const aiQualifiedLeadsPerSdr = Math.round(qualifiedLeadsPerSdr * aiEffectivenessMultiplier);
+
+  // Revenue Projection Funnel Data
+  const funnelData = useMemo(() => [
+    { name: 'Leads', value: leads, fill: '#f1f5f9' },
+    { name: 'Qualified (MQL)', value: Math.round(leads * 0.4), fill: '#cbd5e1' },
+    { name: 'Opportunities (SQL)', value: Math.round(leads * 0.4 * 0.5), fill: '#94a3b8' },
+    { name: 'Closed Deals', value: Math.round(leads * (conversionRate / 100)), fill: '#0f172a' }
+  ], [leads, conversionRate]);
+
+  // LTV:CAC Optimization Advice
+  const getLtvCacAdvice = () => {
+    const ratio = Number(ltvCacRatio);
+    if (ratio >= 3) return 'Healthy ratio. Ready to scale.';
+    if (cac > ltv) return 'Urgent: CAC exceeds LTV. Pause paid channels and fix conversion.';
+    if (ltv < 10000) return 'Needs optimization. Focus on customer success to drive expansion revenue and increase LTV.';
+    return 'Needs optimization. Optimize paid acquisition channels for better cost per lead to decrease CAC.';
+  };
+
+  // Mini-Product Calculations: RWA Compliance-as-a-Service
+  const saasLegalFees = 95000; // Flat base parameter + minimal filing
+  const saasTimeDays = 45; // Pre-mapped templates reduce timeline
+  const legalFeeSavings = traditionalLegalFees - saasLegalFees;
+  const timeToMarketDaysSaved = traditionalTimeDays - saasTimeDays;
+  const earlyLiquidityValue = Math.round((assetValue * 0.08) * (timeToMarketDaysSaved / 365)); // Assuming an 8% market return gained by hitting market earlier
 
   return (
     <div className="pt-32 pb-20 min-h-screen bg-white">
@@ -71,62 +111,90 @@ const FounderTools: React.FC = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* Revenue Projection Calculator */}
-          <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100 flex flex-col">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="p-3 bg-white text-slate-900 rounded-xl shadow-sm border border-slate-200">
-                <Calculator size={24} />
+          {/* Revenue Projection Calculator (Full Width) */}
+          <div className="lg:col-span-2 bg-slate-50 rounded-3xl p-8 border border-slate-100 flex flex-col md:flex-row gap-10">
+            <div className="flex-[1] pr-0 md:pr-8 border-b md:border-b-0 md:border-r border-slate-200 pb-8 md:pb-0">
+              <div className="flex items-center gap-3 mb-8">
+                <div className="p-3 bg-white text-slate-900 rounded-xl shadow-sm border border-slate-200">
+                  <Calculator size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-bold text-slate-900">Revenue Projection</h3>
+                  <p className="text-sm text-slate-500">Model your sales funnel</p>
+                </div>
               </div>
-              <div>
-                <h3 className="text-2xl font-bold text-slate-900">Revenue Projection</h3>
-                <p className="text-sm text-slate-500">Model your sales funnel</p>
+
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-700">Monthly Leads</label>
+                    <span className="text-slate-900 font-bold">{leads.toLocaleString()}</span>
+                  </div>
+                  <input 
+                    type="range" min="100" max="10000" step="100" 
+                    value={leads} onChange={(e) => setLeads(Number(e.target.value))}
+                    className="w-full accent-slate-900"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-700">Conversion Rate (%)</label>
+                    <span className="text-slate-900 font-bold">{conversionRate}%</span>
+                  </div>
+                  <input 
+                    type="range" min="0.1" max="15" step="0.1" 
+                    value={conversionRate} onChange={(e) => setConversionRate(Number(e.target.value))}
+                    className="w-full accent-slate-900"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-700">Avg. Deal Size ($)</label>
+                    <span className="text-slate-900 font-bold">${dealSize.toLocaleString()}</span>
+                  </div>
+                  <input 
+                    type="range" min="1000" max="500000" step="1000" 
+                    value={dealSize} onChange={(e) => setDealSize(Number(e.target.value))}
+                    className="w-full accent-slate-900"
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="space-y-6 mb-8 flex-grow">
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-slate-700">Monthly Leads</label>
-                  <span className="text-slate-900 font-bold">{leads.toLocaleString()}</span>
+            <div className="flex-[1.5] flex flex-col justify-between">
+              <div className="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm mb-6">
+                <div className="text-slate-500 text-sm font-medium mb-1 uppercase tracking-wider">Projected Monthly Revenue</div>
+                <div className="text-4xl font-bold text-slate-900 mb-2">
+                  ${(projectedRevenue / 1000000).toFixed(2)}M
                 </div>
-                <input 
-                  type="range" min="100" max="10000" step="100" 
-                  value={leads} onChange={(e) => setLeads(Number(e.target.value))}
-                  className="w-full accent-slate-900"
-                />
+                <p className="text-slate-500 text-xs">
+                  A 1% increase in conversion adds <strong className="text-slate-900">${((leads * 0.01 * dealSize) / 1000).toFixed(0)}k</strong> to your pipeline.
+                </p>
               </div>
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-slate-700">Conversion Rate (%)</label>
-                  <span className="text-slate-900 font-bold">{conversionRate}%</span>
-                </div>
-                <input 
-                  type="range" min="0.1" max="15" step="0.1" 
-                  value={conversionRate} onChange={(e) => setConversionRate(Number(e.target.value))}
-                  className="w-full accent-slate-900"
-                />
-              </div>
-              <div>
-                <div className="flex justify-between mb-2">
-                  <label className="text-sm font-medium text-slate-700">Avg. Deal Size ($)</label>
-                  <span className="text-slate-900 font-bold">${dealSize.toLocaleString()}</span>
-                </div>
-                <input 
-                  type="range" min="1000" max="500000" step="1000" 
-                  value={dealSize} onChange={(e) => setDealSize(Number(e.target.value))}
-                  className="w-full accent-slate-900"
-                />
-              </div>
-            </div>
 
-            <div className="bg-white rounded-2xl p-6 text-center border border-slate-200 shadow-sm">
-              <div className="text-slate-500 text-sm font-medium mb-1 uppercase tracking-wider">Projected Monthly Revenue</div>
-              <div className="text-4xl font-bold text-slate-900 mb-2">
-                ${(projectedRevenue / 1000000).toFixed(2)}M
+              <div className="flex-grow bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col h-full min-h-[250px]">
+                <div className="text-slate-500 text-sm font-medium mb-4 uppercase tracking-wider text-center">Interactive Sales Funnel</div>
+                <div className="flex-grow">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      layout="vertical"
+                      data={funnelData}
+                      margin={{ top: 0, right: 30, left: 20, bottom: 0 }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
+                      <XAxis type="number" hide />
+                      <YAxis dataKey="name" type="category" axisLine={false} tickLine={false} tick={{ fill: '#475569', fontSize: 13 }} width={120} />
+                      <RechartsTooltip cursor={{fill: 'transparent'}} contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                      <Bar dataKey="value" barSize={32} radius={[0, 4, 4, 0]}>
+                        {funnelData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.fill} />
+                        ))}
+                        <LabelList dataKey="value" position="right" formatter={(v: number) => v.toLocaleString()} fill="#0f172a" fontSize={12} fontWeight="bold" />
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <p className="text-slate-500 text-xs">
-                A 1% increase in conversion adds <strong className="text-slate-900">${((leads * 0.01 * dealSize) / 1000).toFixed(0)}k</strong> to your pipeline.
-              </p>
             </div>
           </div>
 
@@ -299,7 +367,7 @@ const FounderTools: React.FC = () => {
                       tickLine={false} 
                       tick={{ fill: '#64748b', fontSize: 12 }}
                     />
-                    <Tooltip 
+                    <RechartsTooltip 
                       formatter={(value: number) => formatCurrency(value)}
                       contentStyle={{ borderRadius: '12px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                       labelStyle={{ color: '#64748b', marginBottom: '4px' }}
@@ -361,7 +429,7 @@ const FounderTools: React.FC = () => {
                 {ltvCacRatio}:1
               </div>
               <p className="text-slate-500 text-xs">
-                {Number(ltvCacRatio) >= 3 ? 'Healthy ratio. Ready to scale.' : 'Needs optimization. Aim for 3:1 or higher.'}
+                {getLtvCacAdvice()}
               </p>
             </div>
           </div>
@@ -421,37 +489,130 @@ const FounderTools: React.FC = () => {
             </div>
 
             <div className="flex-1 flex flex-col justify-center gap-4">
-              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
-                <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Before AI vs After AI Qualification</div>
-                <div className="flex items-end gap-3 mb-2">
-                  <div className="text-3xl line-through text-slate-500">{manualQualTime}d</div>
-                  <ArrowRight className="text-slate-600 mb-2" size={20} />
-                  <div className="text-4xl font-bold text-white">{aiQualTimeHours}<span className="text-xl text-slate-400">h</span></div>
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Qual. Time</div>
+                  <div className="flex items-end gap-2 mb-1">
+                    <div className="text-xl line-through text-slate-500">{manualQualTime}d</div>
+                    <ArrowRight className="text-slate-600 mb-1" size={16} />
+                    <div className="text-2xl font-bold text-white">{aiQualTimeHours}<span className="text-xs text-slate-400">h</span></div>
+                  </div>
                 </div>
-                <p className="text-slate-400 text-xs">
-                  Respond, qualify, and route prospects instantly while their intent is highest.
+                <div>
+                  <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Weekly Hours Saved</div>
+                  <div className="text-2xl font-bold text-emerald-400 mb-1">
+                    {hoursSavedWeekly}<span className="text-xs text-slate-400"> / team</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
+                <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Leads Qualified / SDR / Week</div>
+                <div className="flex items-end gap-3 mb-2">
+                  <div className="text-3xl text-slate-500">{qualifiedLeadsPerSdr}</div>
+                  <ArrowRight className="text-slate-600 mb-2" size={20} />
+                  <div className="text-4xl font-bold text-white">{aiQualifiedLeadsPerSdr}</div>
+                </div>
+                <p className="text-slate-400 text-xs mt-2">
+                  Calculated using 85% predictive scoring accuracy and 32% outreach reply rates, eliminating manual "spray and pray" noise.
                 </p>
               </div>
 
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
-                <div className="text-emerald-400 text-xs font-semibold mb-1 uppercase tracking-wider">Weekly SDR Time Recovered</div>
+                <div className="text-emerald-400 text-xs font-semibold mb-1 uppercase tracking-wider">Total Effective Pipeline Handled</div>
                 <div className="text-4xl font-bold text-white mb-2">
-                  {hoursSavedWeekly}<span className="text-xl text-slate-400"> hours</span>
+                  {pipelineIncrease.toLocaleString()} <span className="text-lg font-normal text-slate-400">vol.</span>
                 </div>
                 <p className="text-slate-400 text-xs">
-                  Freed from data entry and manual emails. Redirected to high-value closing activities.
+                  A massive scaling multiplier enabled by an AI layer without increasing headcount cost.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Mini-Products (Full Width) */}
+          <div className="lg:col-span-2 bg-gradient-to-br from-indigo-900 to-slate-900 rounded-3xl p-8 border border-slate-800 flex flex-col md:flex-row gap-10">
+            <div className="flex-1 text-white pr-0 md:pr-8 border-b md:border-b-0 md:border-r border-slate-700/50 pb-8 md:pb-0">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="p-3 bg-white/10 text-emerald-400 rounded-xl shadow-inner border border-white/5">
+                  <Building2 size={24} />
+                </div>
+                <div>
+                   <h3 className="text-2xl font-bold text-white whitespace-nowrap">Mini-Product: RWA Compliance</h3>
+                   <p className="text-sm text-slate-400">Compliance-as-a-Service Impact</p>
+                </div>
+              </div>
+              
+              <p className="text-slate-300 text-sm leading-relaxed mb-8">
+                In my role at Tokenizer.estate, the biggest barrier to securing institutional capital was cross-border legal friction. We launched "Compliance-as-a-Service" packages to bundle pre-cleared jurisdictional legal frameworks immediately alongside tokenization tech. This mini-product eliminated uncertainties and slashed go-to-market times.
+              </p>
+
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-300">Total Asset Value Being Tokenized ($)</label>
+                    <span className="text-white font-bold">${(assetValue/1000000).toFixed(1)}M</span>
+                  </div>
+                  <input 
+                    type="range" min="10000000" max="500000000" step="5000000" 
+                    value={assetValue} onChange={(e) => setAssetValue(Number(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-300">Est. Traditional Legal/Structuring Fees ($)</label>
+                    <span className="text-white font-bold">${(traditionalLegalFees/1000).toFixed(0)}k</span>
+                  </div>
+                  <input 
+                    type="range" min="50000" max="1000000" step="10000" 
+                    value={traditionalLegalFees} onChange={(e) => setTraditionalLegalFees(Number(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+                <div>
+                  <div className="flex justify-between mb-2">
+                    <label className="text-sm font-medium text-slate-300">Est. Traditional Structuring Time (Days)</label>
+                    <span className="text-white font-bold">{traditionalTimeDays} days</span>
+                  </div>
+                  <input 
+                    type="range" min="90" max="365" step="15" 
+                    value={traditionalTimeDays} onChange={(e) => setTraditionalTimeDays(Number(e.target.value))}
+                    className="w-full accent-emerald-500 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex-1 flex flex-col justify-center gap-4">
+              <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm grid grid-cols-2 gap-4">
+                <div>
+                  <div className="text-emerald-400 text-xs font-semibold mb-1 uppercase tracking-wider">Fee Reduction</div>
+                  <div className="flex items-end gap-2 mb-1">
+                    <div className="text-xl line-through text-slate-500" title="Traditional Fees">${(traditionalLegalFees/1000).toFixed(0)}k</div>
+                    <ArrowRight className="text-slate-600 mb-1" size={16} />
+                    <div className="text-2xl font-bold text-white">${(saasLegalFees/1000).toFixed(0)}<span className="text-xs text-slate-400">k fixed</span></div>
+                  </div>
+                  <div className="text-emerald-400 text-sm font-bold mt-1">Saves ${(legalFeeSavings/1000).toFixed(0)}K up-front</div>
+                </div>
+                <div>
+                  <div className="text-emerald-400 text-xs font-semibold mb-1 uppercase tracking-wider">Time to Market</div>
+                  <div className="flex items-end gap-2 mb-1">
+                     <div className="text-xl line-through text-slate-500" title="Traditional Time">{traditionalTimeDays}d</div>
+                     <ArrowRight className="text-slate-600 mb-1" size={16} />
+                     <div className="text-2xl font-bold text-white">{saasTimeDays}<span className="text-xs text-slate-400">d avg</span></div>
+                  </div>
+                  <div className="text-emerald-400 text-sm font-bold mt-1">Accelerates closing by {timeToMarketDaysSaved} days</div>
+                </div>
               </div>
 
               <div className="bg-white/5 rounded-2xl p-6 border border-white/10 backdrop-blur-sm">
-                <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Effective Pipeline Handled</div>
-                <div className="flex items-end gap-3 mb-2">
-                  <div className="text-3xl text-slate-500">{inboundVolume}</div>
-                  <ArrowRight className="text-slate-600 mb-2" size={20} />
-                  <div className="text-4xl font-bold text-white">{pipelineIncrease.toLocaleString()}</div>
+                <div className="text-indigo-400 text-xs font-semibold mb-1 uppercase tracking-wider">Institutional Trust Capital Generated</div>
+                <div className="text-4xl font-bold text-white mb-2">
+                  ${(earlyLiquidityValue / 1000000).toFixed(2)}M <span className="text-lg font-normal text-slate-400">immediate ROI</span>
                 </div>
-                <p className="text-slate-400 text-xs">
-                  AI enables you to process 2.5x more volume without letting leads slip through the cracks.
+                <p className="text-slate-400 text-xs mt-2">
+                  Calculated based on an 8% market return captured by entering the market {timeToMarketDaysSaved} days earlier than a traditional fragmented legal architecture process.
                 </p>
               </div>
             </div>

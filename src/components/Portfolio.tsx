@@ -133,6 +133,7 @@ const Portfolio: React.FC = () => {
                   const isChallenge = paragraph.startsWith('Challenge:');
                   const isAction = paragraph.startsWith('Action:');
                   const isResult = paragraph.startsWith('Result:');
+                  const isKeyTakeaway = paragraph.startsWith('Key Takeaway:');
                   
                   let title = '';
                   let content = paragraph;
@@ -161,16 +162,23 @@ const Portfolio: React.FC = () => {
                     titleClass = 'text-white';
                     icon = <CheckCircle2 className="text-white" size={20} />;
                   }
+                  else if (isKeyTakeaway) {
+                    title = 'Key Takeaway';
+                    content = paragraph.replace('Key Takeaway:', '').trim();
+                    bgClass = 'bg-indigo-50 border-indigo-100';
+                    titleClass = 'text-indigo-900';
+                    icon = <span className="text-xl">💡</span>;
+                  }
 
                   return (
                     <div key={idx} className={`p-6 rounded-xl border ${bgClass}`}>
                       {title && (
                         <div className="flex items-center gap-2 mb-3">
-                          {icon}
+                          {icon && <span className="flex-shrink-0">{icon}</span>}
                           <h4 className={`text-lg font-bold ${titleClass}`}>{title}</h4>
                         </div>
                       )}
-                      <p className={`${isResult ? 'text-slate-300' : 'text-slate-700'} leading-relaxed`}>{content}</p>
+                      <p className={`${isResult ? 'text-slate-300' : (isKeyTakeaway ? 'text-indigo-900 font-medium' : 'text-slate-700')} leading-relaxed`}>{content}</p>
                     </div>
                   );
                 })}
