@@ -36,16 +36,7 @@ cp .env.example .env
 npm run dev
 ```
 
-## 📈 Vercel Deployment Instructions
-To publish this portfolio dynamically and automatically:
 
-1. Create a free account at [Vercel](https://vercel.com).
-2. Connect your GitHub account to Vercel.
-3. Click **Add New Project** and select this repository from your GitHub list.
-4. Vercel will automatically detect that it's a Vite application.
-5. In the **Environment Variables** section before deploying, you can inject API keys (e.g., `GEMINI_API_KEY`) if needed for backend functions.
-6. Click **Deploy**. Vercel will build and publish your project. 
-7. *Magic*: Every time you push changes to your GitHub `main` branch, Vercel will automatically rebuild and update the live site under 2 minutes.
 
 ---
 *Built for scale. Structured for revenue.*
