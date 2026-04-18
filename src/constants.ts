@@ -16,7 +16,7 @@ export const RESUME_DATA: ResumeData = {
     socials: [
       { platform: "LinkedIn", url: "https://www.linkedin.com/in/ali-shahad-93532ba0", iconName: "linkedin" },
       { platform: "GitHub", url: "https://github.com/alishahad", iconName: "github" },
-      { platform: "Website", url: "https://alishahad.github.io", iconName: "globe" }
+      { platform: "Website", url: "https://ais-pre-5mkpocwgdr73hprfeyndjk-345573694511.us-east1.run.app", iconName: "globe" }
     ]
   },
   experience: [
