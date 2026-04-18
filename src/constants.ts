@@ -27,9 +27,9 @@ export const RESUME_DATA: ResumeData = {
       period: "June 2025 - Present",
       description: [
         "Duties: Joined pre-revenue to architect the global GTM strategy and build the commercial function from zero for a complex RWA tokenization platform.",
-        "Achievement: Transformed an unproven startup into a market-validated, trustworthy company, establishing a robust sales pipeline and institutional credibility.",
+        "Achievement: Transformed an unproven startup into a market-validated, trustworthy company by generating a fully qualified $25M robust sales pipeline and securing early backing from tier-1 institutions to establish immediate credibility.",
         "Achievement: Closed 5 major B2B institutional deals within the first 5 months, navigating complex legal and cross-border compliance frameworks.",
-        "Achievement: Secured strategic partnerships and opened engagements with regulatory sandboxes and financial authorities, solidifying market position."
+        "Achievement: Navigated complex multi-jurisdictional compliance to secure strategic partnerships and actively open engagements with UAE and EU regulatory sandboxes and financial authorities, paving the way for scale."
       ]
     },
     {
@@ -38,9 +38,10 @@ export const RESUME_DATA: ResumeData = {
       company: "Orbita Investments",
       period: "July 2024 - Present",
       description: [
-        "Duties: Constructed complete commercial department and operational framework within 2 months.",
+        "Duties: Built the commercial department from the ground up, establishing the operational framework, KPI dashboards, go-to-market playbooks, and hiring structure within 2 months.",
         "Duties: Spearheading institutional negotiations to raise $36.5M in startup capital.",
-        "Achievement: Achieved 125% of revenue targets in Q1 and reduced the average sales cycle by 40%.",
+        "Achievement: Achieved 125% of Q1 revenue targets (surpassing a $5M baseline quota) driven by optimizing enterprise engagement models.",
+        "Achievement: Reduced the average sales cycle by 40% by deploying automated lead qualification, structured deal-desk approvals, and standardized pitching materials.",
         "Achievement: Onboarded 50+ strategic partners for indirect sales channels, boosting overall performance by 48%."
       ]
     },
