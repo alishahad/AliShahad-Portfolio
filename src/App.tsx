@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Hero from './components/Hero';
 import Resume from './components/Resume';
+import ExecutiveResume from './components/ExecutiveResume';
 import Portfolio from './components/Portfolio';
 import Services from './components/Services';
 import FounderTools from './components/FounderTools';
@@ -11,7 +12,7 @@ import { RESUME_DATA } from './constants';
 const App: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<'home' | 'tools'>('home');
+  const [activeTab, setActiveTab] = useState<'home' | 'tools' | 'resume'>('home');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,20 +23,16 @@ const App: React.FC = () => {
   }, []);
 
   const navLinks = [
-    { name: 'About', href: '#root', tab: 'home' },
-    { name: 'Services', href: '#services', tab: 'home' },
-    { name: 'Experience', href: '#resume', tab: 'home' },
-    { name: 'Portfolio', href: '#portfolio', tab: 'home' },
+    { name: 'Overview', href: '#', tab: 'home' },
     { name: 'Founder Tools', href: '#', tab: 'tools' },
+    { name: 'Executive Resume', href: '#', tab: 'resume' },
   ];
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, link: any) => {
-    if (link.tab) {
-      if (link.tab !== activeTab) {
-        e.preventDefault();
-        setActiveTab(link.tab as 'home' | 'tools');
-        window.scrollTo(0, 0);
-      }
+    e.preventDefault();
+    if (link.tab !== activeTab) {
+      setActiveTab(link.tab as 'home' | 'tools' | 'resume');
+      window.scrollTo(0, 0);
     }
     setMobileMenuOpen(false);
   };
@@ -116,17 +113,21 @@ const App: React.FC = () => {
 
       {/* Main Content */}
       <main>
-        {activeTab === 'home' ? (
+        {activeTab === 'home' && (
           <>
-            <Hero />
+            <Hero onBuildResume={() => { setActiveTab('resume'); window.scrollTo(0,0); }} />
             <div id="services">
               <Services />
             </div>
             <Resume />
             <Portfolio />
           </>
-        ) : (
+        )}
+        {activeTab === 'tools' && (
           <FounderTools />
+        )}
+        {activeTab === 'resume' && (
+          <ExecutiveResume />
         )}
       </main>
 

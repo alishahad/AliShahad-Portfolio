@@ -4,25 +4,14 @@ import { Mail, MapPin, Github, Linkedin, Twitter, Download, Globe, X, CheckCircl
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-const Hero: React.FC = () => {
-  const { name, title, summary, contact, metrics } = RESUME_DATA;
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
-  const [downloadState, setDownloadState] = useState<'idle' | 'generating' | 'done'>('idle');
-  const [demoState, setDemoState] = useState<'idle' | 'submitting' | 'done'>('idle');
-  
-  // Download Options
-  const [selectedCountry, setSelectedCountry] = useState('Global');
-  const [selectedRole, setSelectedRole] = useState('Chief Revenue Officer');
-  const [selectedLength, setSelectedLength] = useState('Short (1 Page)');
-  const [selectedLanguage, setSelectedLanguage] = useState('English');
-  const [atsMode, setAtsMode] = useState<'auto' | 'manual'>('auto');
-  const [manualAtsKeywords, setManualAtsKeywords] = useState('');
-  const [includeExperience, setIncludeExperience] = useState(true);
-  const [includeEducation, setIncludeEducation] = useState(true);
-  const [includeSkills, setIncludeSkills] = useState(true);
+interface HeroProps {
+  onBuildResume: () => void;
+}
 
-  const resumeRef = useRef<HTMLDivElement>(null);
+const Hero: React.FC<HeroProps> = ({ onBuildResume }) => {
+  const { name, title, summary, contact, metrics } = RESUME_DATA;
+  const [isDemoModalOpen, setIsDemoModalOpen] = useState(false);
+  const [demoState, setDemoState] = useState<'idle' | 'submitting' | 'done'>('idle');
 
   const getIcon = (name: string) => {
     switch (name.toLowerCase()) {
@@ -171,11 +160,11 @@ const Hero: React.FC = () => {
               Request Demo
             </button>
             <button 
-              onClick={() => setIsModalOpen(true)}
+              onClick={onBuildResume}
               className="px-8 py-4 bg-white text-slate-900 border border-slate-200 rounded-full text-sm font-semibold hover:bg-slate-50 transition-all flex items-center gap-2"
             >
               <Download size={16} />
-              Download Resume
+              Build Resume
             </button>
           </div>
 
@@ -201,195 +190,6 @@ const Hero: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {/* Download Modal */}
-      {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center p-6 border-b border-slate-100">
-              <h3 className="text-xl font-bold text-slate-900">Customize Resume</h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-slate-600">
-                <X size={20} />
-              </button>
-            </div>
-            
-            <div className="p-6 space-y-5">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Target Region</label>
-                  <select 
-                    value={selectedCountry}
-                    onChange={(e) => setSelectedCountry(e.target.value)}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
-                  >
-                    <option>Global</option>
-                    <option>UAE / MENA</option>
-                    <option>Europe</option>
-                    <option>USA</option>
-                    <option>APAC</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">Language</label>
-                  <select 
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm"
-                  >
-                    <option>English</option>
-                    <option>Russian</option>
-                    <option>Spanish</option>
-                    <option>Arabic</option>
-                    <option>French</option>
-                    <option>German</option>
-                  </select>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Target Role</label>
-                <select 
-                  value={selectedRole}
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full p-3 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-                >
-                  <option>Chief Revenue Officer (CRO)</option>
-                  <option>Chief Commercial Officer (CCO)</option>
-                  <option>VP of Global Sales</option>
-                  <option>Head of Business Development</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Format Length</label>
-                <div className="flex gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="length" 
-                      value="Short (1 Page)" 
-                      checked={selectedLength === 'Short (1 Page)'}
-                      onChange={(e) => setSelectedLength(e.target.value)}
-                      className="text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <span className="text-sm text-slate-700">Short (Top 2 Roles)</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="radio" 
-                      name="length" 
-                      value="Long (Full History)" 
-                      checked={selectedLength === 'Long (Full History)'}
-                      onChange={(e) => setSelectedLength(e.target.value)}
-                      className="text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <span className="text-sm text-slate-700">Long (Full History)</span>
-                  </label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">Include Sections</label>
-                <div className="flex flex-wrap gap-4">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      checked={includeExperience}
-                      onChange={(e) => setIncludeExperience(e.target.checked)}
-                      className="text-indigo-600 focus:ring-indigo-500 rounded"
-                    />
-                    <span className="text-sm text-slate-700">Experience</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      checked={includeEducation}
-                      onChange={(e) => setIncludeEducation(e.target.checked)}
-                      className="text-indigo-600 focus:ring-indigo-500 rounded"
-                    />
-                    <span className="text-sm text-slate-700">Education</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input 
-                      type="checkbox" 
-                      checked={includeSkills}
-                      onChange={(e) => setIncludeSkills(e.target.checked)}
-                      className="text-indigo-600 focus:ring-indigo-500 rounded"
-                    />
-                    <span className="text-sm text-slate-700">Skills</span>
-                  </label>
-                </div>
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">ATS Keywords Optimization</label>
-                <div className="flex flex-wrap gap-4 mb-3">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="atsMode"
-                      value="auto"
-                      checked={atsMode === 'auto'}
-                      onChange={() => setAtsMode('auto')}
-                      className="text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <span className="text-sm text-slate-700">Auto-generate (Based on Role/Region)</span>
-                  </label>
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="radio"
-                      name="atsMode"
-                      value="manual"
-                      checked={atsMode === 'manual'}
-                      onChange={() => setAtsMode('manual')}
-                      className="text-indigo-600 focus:ring-indigo-500"
-                    />
-                    <span className="text-sm text-slate-700">Custom Keywords</span>
-                  </label>
-                </div>
-                {atsMode === 'manual' && (
-                  <textarea
-                    value={manualAtsKeywords}
-                    onChange={(e) => setManualAtsKeywords(e.target.value)}
-                    placeholder="Enter targeted keywords to invisibly embed in PDF (e.g., Salesforce, Enterprise Sales, VP, MEDDIC)"
-                    rows={2}
-                    className="w-full p-2.5 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none text-sm resize-none"
-                  />
-                )}
-              </div>
-
-              <div className="bg-indigo-50 p-3 rounded-lg flex items-start gap-3">
-                <SparklesIcon className="text-indigo-600 shrink-0 mt-0.5" size={16} />
-                <p className="text-xs text-indigo-800 leading-relaxed">
-                  The generated PDF will automatically include hidden ATS-friendly keywords {atsMode === 'auto' ? `optimized for ${selectedRole} roles in ${selectedCountry}` : 'based on your custom input'}.
-                </p>
-              </div>
-            </div>
-
-            <div className="p-6 border-t border-slate-100 bg-slate-50 flex justify-end gap-3">
-              <button 
-                onClick={() => setIsModalOpen(false)}
-                className="px-5 py-2.5 text-sm font-medium text-slate-600 hover:text-slate-900 transition-colors"
-              >
-                Cancel
-              </button>
-              <button 
-                onClick={handleDownload}
-                disabled={downloadState !== 'idle'}
-                className="px-6 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors flex items-center gap-2 disabled:opacity-70"
-              >
-                {downloadState === 'generating' ? (
-                  <>Generating... <span className="animate-spin border-2 border-white/30 border-t-white rounded-full w-4 h-4"></span></>
-                ) : downloadState === 'done' ? (
-                  <>Downloaded <CheckCircle2 size={16} /></>
-                ) : (
-                  <>Download PDF</>
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Demo Request Modal */}
       {isDemoModalOpen && (
@@ -454,89 +254,8 @@ const Hero: React.FC = () => {
         </div>
       )}
 
-      {/* Hidden Resume Template for PDF Generation */}
-      <div 
-        ref={resumeRef} 
-        className="absolute top-0 left-0 w-[800px] bg-white p-12 text-slate-900" 
-        style={{ display: 'none', zIndex: -9999 }}
-        dir={selectedLanguage === 'Arabic' ? 'rtl' : 'ltr'}
-      >
-        <div className="border-b-2 border-slate-900 pb-6 mb-6">
-          <h1 className="text-4xl font-bold mb-2">{name}</h1>
-          <h2 className="text-xl text-indigo-600 font-medium mb-4">{selectedRole} | {selectedCountry} Focus</h2>
-          <div className="flex gap-4 text-sm text-slate-600">
-            <span>{contact.email}</span>
-            <span>•</span>
-            <span>{contact.location}</span>
-            <span>•</span>
-            <span>linkedin.com/in/ali-shahad-93532ba0</span>
-          </div>
-        </div>
-
-        <div className="mb-6">
-          <h3 className="text-lg font-bold uppercase tracking-wider text-slate-900 mb-3">{t.Summary}</h3>
-          <p className="text-sm leading-relaxed text-slate-700">{summary}</p>
-        </div>
-
-        {includeExperience && (
-          <div className="mb-6">
-            <h3 className="text-lg font-bold uppercase tracking-wider text-slate-900 mb-4">{t.Experience}</h3>
-            <div className="space-y-5">
-              {(selectedLength === 'Short (1 Page)' ? RESUME_DATA.experience.slice(0, 2) : RESUME_DATA.experience).map(job => (
-                <div key={job.id}>
-                  <div className="flex justify-between items-baseline mb-1">
-                    <h4 className="font-bold text-slate-900">{job.role}</h4>
-                    <span className="text-sm text-slate-500 font-medium">{job.period}</span>
-                  </div>
-                  <div className="text-indigo-600 text-sm font-medium mb-2">{job.company}</div>
-                  <ul className="list-disc list-outside ml-4 space-y-1">
-                    {job.description.map((desc, i) => (
-                      <li key={i} className="text-sm text-slate-700 leading-relaxed pl-1">{desc}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {includeEducation && (
-          <div className="mb-6">
-            <h3 className="text-lg font-bold uppercase tracking-wider text-slate-900 mb-4">Education</h3>
-            <div className="space-y-3">
-              {RESUME_DATA.education.map((edu, idx) => (
-                <div key={idx}>
-                  <div className="font-bold text-slate-900">{edu.degree}</div>
-                  <div className="text-sm text-slate-700">{edu.school} | {edu.year}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {includeSkills && (
-          <div className="mb-6">
-            <h3 className="text-lg font-bold uppercase tracking-wider text-slate-900 mb-4">{t.Skills}</h3>
-            <div className="flex flex-wrap gap-2">
-              {RESUME_DATA.skills.flatMap(s => s.items).map(skill => (
-                <span key={skill} className="px-2 py-1 bg-slate-100 text-slate-700 text-xs rounded font-medium">{skill}</span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* The ATSKeywords element used to be rendered as HTML, but we now render directly to jsPDF canvas so it is fully selectable string text. */}
-      </div>
     </section>
   );
 };
-
-// Helper icon for the modal
-const SparklesIcon = ({ className, size }: { className?: string, size?: number }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-    <path d="M5 3v4"/><path d="M19 17v4"/><path d="M3 5h4"/><path d="M17 19h4"/>
-  </svg>
-);
 
 export default Hero;

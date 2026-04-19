@@ -1,9 +1,21 @@
 import { GoogleGenAI } from '@google/genai';
 import { RESUME_DATA } from '../constants';
 
-// Initialize the Gemini API client
-// The API key is injected via Vite's define plugin from the environment
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiClient: GoogleGenAI | null = null;
+
+function getAiClient(): GoogleGenAI {
+  if (!aiClient) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    // We allow initialization even if apiKey is missing, the SDK might handle it or throw later, 
+    // but initializing it lazily prevents the entire React app from crashing on import.
+    // However, @google/genai specifically throws if initialized without a key and no environment key is found.
+    if (!apiKey) {
+      console.warn('GEMINI_API_KEY is missing. Chat widget will not function properly.');
+    }
+    aiClient = new GoogleGenAI({ apiKey: apiKey || 'dummy-key-to-prevent-crash' });
+  }
+  return aiClient;
+}
 
 // Construct a comprehensive system prompt based on the resume data
 const systemInstruction = `
@@ -51,6 +63,12 @@ Guidelines for responding:
 
 export async function sendMessageToGeminiStream(message: string) {
   try {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey === 'dummy-key-to-prevent-crash') {
+      throw new Error("API key is not configured. Please add GEMINI_API_KEY to your environment variables.");
+    }
+    
+    const ai = getAiClient();
     // We use gemini-2.5-flash as it's the recommended default for general text tasks
     const responseStream = await ai.models.generateContentStream({
       model: 'gemini-2.5-flash',
