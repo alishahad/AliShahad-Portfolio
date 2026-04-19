@@ -1,8 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { RESUME_DATA } from '../constants';
 import { Mail, MapPin, Github, Linkedin, Twitter, Download, Globe, X, CheckCircle2, Users } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 
 interface HeroProps {
   onBuildResume: () => void;
@@ -21,75 +19,6 @@ const Hero: React.FC<HeroProps> = ({ onBuildResume }) => {
       case 'globe': return <Globe size={20} />;
       default: return null;
     }
-  };
-
-  const getAtsKeywords = (role: string, region: string) => {
-    const base = "CRM, B2B, SaaS, Enterprise Sales, Lead Generation, Strategic Partnerships, GTM, Pipeline Management, Revenue Growth, Key Account Management, Negotiation, Cross-functional Leadership, Data Analysis, SQL, Python, PowerBI, Vibe Coding, AI Sales Automation";
-    const roleKeywords = role.includes('CRO') || role.includes('CCO') ? "C-Suite, Executive Management, P&L Responsibility, Board Reporting, Revenue Architecture" :
-                         role.includes('Director') ? "Director of Sales, Team Leadership, Territory Expansion" : "RWA Tokenization, Web3, M&A, Fundraising, Capital Raising";
-    const regionKeywords = region === 'Global' ? "Global Expansion, International Sales, Cross-border" : `${region} Market, Localized GTM, Regional Compliance`;
-    return `${base}, ${roleKeywords}, ${regionKeywords}`;
-  };
-
-  const handleDownload = async () => {
-    if (!resumeRef.current) return;
-    setDownloadState('generating');
-    
-    try {
-      // Temporarily make the hidden resume visible for capture
-      resumeRef.current.style.display = 'block';
-      
-      const canvas = await html2canvas(resumeRef.current, {
-        scale: 2,
-        useCORS: true,
-        logging: false
-      });
-      
-      resumeRef.current.style.display = 'none';
-
-      const imgData = canvas.toDataURL('image/png');
-      
-      // Calculate PDF height based on canvas ratio to support long resumes
-      const pdfWidth = canvas.width / 2;
-      const pdfHeight = canvas.height / 2;
-      
-      const pdf = new jsPDF({
-        orientation: 'portrait',
-        unit: 'px',
-        format: [pdfWidth, pdfHeight]
-      });
-      
-      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-      
-      // Inject invisible real text for ATS parsers directly into the PDF document layer
-      // This guarantees parsing algorithms can scrape these high-value keywords.
-      pdf.setFontSize(1);
-      pdf.setTextColor(255, 255, 255); // White text on white background
-      pdf.text(finalAtsKeywords, 10, pdfHeight - 2, { maxWidth: pdfWidth - 20 });
-      
-      const safeName = name.replace(/\s+/g, '_');
-      const safeRole = selectedRole.replace(/\s+/g, '_');
-      pdf.save(`${safeName}_${safeRole}_Resume_${selectedLanguage}.pdf`);
-      
-      setDownloadState('done');
-      setTimeout(() => {
-        setDownloadState('idle');
-        setIsModalOpen(false);
-      }, 2000);
-    } catch (error) {
-      console.error("Failed to generate PDF", error);
-      setDownloadState('idle');
-    }
-  };
-
-  const atsKeywords = getAtsKeywords(selectedRole, selectedCountry);
-  const finalAtsKeywords = atsMode === 'auto' ? atsKeywords : manualAtsKeywords;
-  
-  // Translations for PDF headers
-  const t = {
-    Summary: selectedLanguage === 'Arabic' ? 'ملخص' : selectedLanguage === 'Spanish' ? 'Resumen' : selectedLanguage === 'Russian' ? 'Резюме' : selectedLanguage === 'French' ? 'Résumé' : selectedLanguage === 'German' ? 'Zusammenfassung' : 'Summary',
-    Experience: selectedLanguage === 'Arabic' ? 'الخبرة' : selectedLanguage === 'Spanish' ? 'Experiencia' : selectedLanguage === 'Russian' ? 'Опыт работы' : selectedLanguage === 'French' ? 'Expérience' : selectedLanguage === 'German' ? 'Erfahrung' : 'Experience',
-    Skills: selectedLanguage === 'Arabic' ? 'المهارات' : selectedLanguage === 'Spanish' ? 'Habilidades' : selectedLanguage === 'Russian' ? 'Навыки' : selectedLanguage === 'French' ? 'Compétences' : selectedLanguage === 'German' ? 'Fähigkeiten' : 'Skills',
   };
 
   const handleDemoSubmit = (e: React.FormEvent) => {

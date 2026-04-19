@@ -5,7 +5,7 @@ let aiClient: GoogleGenAI | null = null;
 
 function getAiClient(): GoogleGenAI {
   if (!aiClient) {
-    const apiKey = process.env.GEMINI_API_KEY;
+    const apiKey = process.env.GEMINI_API_KEY || (import.meta as any).env?.VITE_GEMINI_API_KEY || '';
     // We allow initialization even if apiKey is missing, the SDK might handle it or throw later, 
     // but initializing it lazily prevents the entire React app from crashing on import.
     // However, @google/genai specifically throws if initialized without a key and no environment key is found.
