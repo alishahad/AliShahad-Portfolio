@@ -26,10 +26,10 @@ export const RESUME_DATA: ResumeData = {
       company: "Tokenizer.estate",
       period: "June 2025 - Present",
       description: [
-        "Duties: Joined pre-revenue to architect the global GTM strategy and build the commercial function from zero for a complex RWA tokenization platform.",
-        "Achievement: Transformed an unproven startup into a market-validated, trustworthy company by generating a fully qualified $25M robust sales pipeline and securing early backing from tier-1 institutions to establish immediate credibility.",
-        "Achievement: Closed 5 major B2B institutional deals within the first 5 months, navigating complex legal and cross-border compliance frameworks.",
-        "Achievement: Navigated complex multi-jurisdictional compliance to secure strategic partnerships and actively open engagements with UAE and EU regulatory sandboxes and financial authorities, paving the way for scale."
+        "Duties: Joined a zero-conversion environment despite high lead volume; onboarded the complex Web3/tokenization product in 5 days to step directly into client-facing sales leadership.",
+        "Duties: Built the entire sales infrastructure from scratch, deploying playbooks, scripts, CRM workflows, and qualification systems while redesigning website messaging and funnel proposals.",
+        "Achievement: Operated as a Senior IC and Head of Sales, owning the full pipeline (inbound, outbound, partners, closing) and opening new indirect channels for long-term strategic growth.",
+        "Achievement: Converted a previously 'dead' pipeline into a revenue-generating funnel, closing the first major deal in 3 months and scaling to 5+ complex enterprise B2B deals in the first 5 months."
       ]
     },
     {
@@ -177,10 +177,10 @@ export const RESUME_DATA: ResumeData = {
       logoUrl: "/tokenizer-logo.png",
       liveUrl: "https://tokenizer.estate",
       caseStudy: [
-        "Challenge: Secure tier-1 institutional funding for an unproven, pre-revenue RWA tokenization startup lacking a foundational Go-To-Market strategy, commercial department, and market credibility.",
-        "Action: Architected the global GTM strategy and built the commercial function from zero. Initiated strategic engagements with UAE and EU regulatory sandboxes to dissolve cross-border compliance friction and accelerate enterprise onboarding.",
-        "Result: Generated a fully qualified $25M sales pipeline, secured early tier-1 institutional backing, and closed 5 major B2B infrastructure deals within the first 5 months of operation.",
-        "Key Takeaway: Balancing technological innovation with robust, multi-jurisdictional regulatory compliance is the ultimate differentiator in the RWA space. It separates novelty from true institutional-grade assets."
+        "Challenge: The startup featured a complex Web3/RWA tokenization product but suffered from 0 conversions despite high lead volume, following multiple failed attempts by previous sales teams.",
+        "Action: Built the complete sales infrastructure from scratch. Overhauled the GTM playbook, redesigned website messaging for clarity, and implemented robust CRM workflows. Operated dual-role as Senior IC and Head of Sales to personally drive closing while building indirect partnership channels.",
+        "Result: Converted a dormant pipeline into a revenue-generating funnel. Closed the first major deal within 3 months and secured 5+ high-value enterprise B2B deals with complex legal structures in the first 5 months.",
+        "Key Takeaway: Simplifying complex product messaging and implementing rigorous, systematic qualification is critical to turning high-volume noise into high-value enterprise revenue."
       ]
     },
     {

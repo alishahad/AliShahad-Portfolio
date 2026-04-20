@@ -69,13 +69,14 @@ export async function sendMessageToGeminiStream(message: string) {
     }
     
     const ai = getAiClient();
-    // We use gemini-2.5-flash as it's the recommended default for general text tasks
+    // We use gemini-3-flash-preview for general fast intelligent tasks with search grounding
     const responseStream = await ai.models.generateContentStream({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: message,
       config: {
         systemInstruction: systemInstruction,
         temperature: 0.3, // Lower temperature for more factual, consistent responses
+        tools: [{ googleSearch: {} }]
       }
     });
     

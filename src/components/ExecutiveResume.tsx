@@ -18,7 +18,7 @@ const ExecutiveResume: React.FC = () => {
   // Download Options
   const [selectedCountry, setSelectedCountry] = useState('Global');
   const [selectedRole, setSelectedRole] = useState('Chief Revenue Officer');
-  const [selectedLength, setSelectedLength] = useState('Short (1 Page)');
+  const [selectedLength, setSelectedLength] = useState('Concise (1 Page)');
   const [selectedLanguage, setSelectedLanguage] = useState('English');
   const [atsMode, setAtsMode] = useState<'auto' | 'manual'>('auto');
   const [manualAtsKeywords, setManualAtsKeywords] = useState('');
@@ -172,16 +172,22 @@ const ExecutiveResume: React.FC = () => {
                 <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Density length</label>
                 <div className="bg-slate-50 p-1.5 rounded-lg flex border border-slate-200">
                   <button 
-                    onClick={() => setSelectedLength('Short (1 Page)')}
-                    className={`flex-1 text-xs py-2 rounded-md font-semibold transition-colors ${selectedLength === 'Short (1 Page)' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-600 hover:text-slate-900'}`}
+                    onClick={() => setSelectedLength('Concise (1 Page)')}
+                    className={`flex-1 text-[11px] py-2 rounded-md font-semibold transition-colors ${selectedLength === 'Concise (1 Page)' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-600 hover:text-slate-900'}`}
                   >
-                    Executive (1 Page)
+                    Concise (1 Page)
                   </button>
                   <button 
-                    onClick={() => setSelectedLength('Long (Full History)')}
-                    className={`flex-1 text-xs py-2 rounded-md font-semibold transition-colors ${selectedLength === 'Long (Full History)' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-600 hover:text-slate-900'}`}
+                    onClick={() => setSelectedLength('Standard (2 Pages)')}
+                    className={`flex-1 text-[11px] py-2 rounded-md font-semibold transition-colors ${selectedLength === 'Standard (2 Pages)' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-600 hover:text-slate-900'}`}
                   >
-                    Full History
+                    Standard (2 Pages)
+                  </button>
+                  <button 
+                    onClick={() => setSelectedLength('Comprehensive (Full History)')}
+                    className={`flex-1 text-[11px] py-2 rounded-md font-semibold transition-colors ${selectedLength === 'Comprehensive (Full History)' ? 'bg-white shadow-sm text-indigo-700' : 'text-slate-600 hover:text-slate-900'}`}
+                  >
+                    Comprehensive
                   </button>
                 </div>
               </div>
@@ -282,7 +288,7 @@ const ExecutiveResume: React.FC = () => {
                 <div className="mb-6">
                   <h3 className="text-[15px] font-bold uppercase tracking-wider text-slate-900 mb-3">{t.Experience}</h3>
                   <div className="space-y-4">
-                    {(selectedLength === 'Short (1 Page)' ? RESUME_DATA.experience.slice(0, 3) : RESUME_DATA.experience).map(job => (
+                    {(selectedLength === 'Concise (1 Page)' ? RESUME_DATA.experience.slice(0, 3) : selectedLength === 'Standard (2 Pages)' ? RESUME_DATA.experience.slice(0, 6) : RESUME_DATA.experience).map(job => (
                       <div key={job.id}>
                         <div className="flex justify-between items-baseline mb-0.5">
                           <h4 className="font-bold text-[14px] text-slate-900">{job.role}</h4>
@@ -290,7 +296,7 @@ const ExecutiveResume: React.FC = () => {
                         </div>
                         <div className="text-indigo-700 text-[13px] font-semibold mb-2">{job.company}</div>
                         <ul className="list-disc list-outside ml-4 space-y-1">
-                          {job.description.map((desc, i) => {
+                          {(selectedLength === 'Concise (1 Page)' ? job.description.slice(0, 2) : job.description).map((desc, i) => {
                             const isMetric = desc.includes('%') || desc.includes('$') || desc.includes('x');
                             const cleanText = desc.replace(/^(Duties|Achievement):\s*/, '');
                             return (
@@ -325,10 +331,15 @@ const ExecutiveResume: React.FC = () => {
 
               {includeSkills && (
                 <div>
-                  <h3 className="text-[15px] font-bold uppercase tracking-wider text-slate-900 mb-3">{t.Skills}</h3>
-                  <p className="text-[13px] text-slate-700 leading-relaxed font-medium">
-                    {RESUME_DATA.skills.flatMap(s => s.items).join(" • ")}
-                  </p>
+                  <h3 className="text-[15px] font-bold uppercase tracking-wider text-slate-900 mb-2">{t.Skills}</h3>
+                  <div className="space-y-1">
+                    {RESUME_DATA.skills.map(skillGroup => (
+                       <div key={skillGroup.category} className="text-[12px] leading-relaxed">
+                         <span className="font-bold text-slate-900">{skillGroup.category}:</span>{' '}
+                         <span className="text-slate-700">{skillGroup.items.join(" • ")}</span>
+                       </div>
+                    ))}
+                  </div>
                 </div>
               )}
 
